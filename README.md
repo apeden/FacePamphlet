@@ -1,6 +1,6 @@
 
 # FacePamphlet
-Completion of assignment y of the Stanford Univeristy Java course (2007/8) available as Open courseware
+Completion of assignment 7 of the Stanford Univeristy Java course (2007/8) available as Open courseware
 
 
 ## Installation
