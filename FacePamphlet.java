@@ -23,6 +23,7 @@ public class FacePamphlet extends Program
 	 * initialization that needs to be performed.
 	 */
 	public void init() {
+		
 		profileDatabase = new FacePamphletDatabase();
 		add(profileCanvas);
 		nameField = new JTextField(TEXT_FIELD_SIZE);
@@ -45,8 +46,11 @@ public class FacePamphlet extends Program
 		add(new JLabel(EMPTY_LABEL_TEXT), WEST);
 		add(friendField, WEST);
 		add(new JButton("Add Friend"), WEST);
-		// You fill this in
+		add(new JButton("Display Everyone"), WEST);
 		addActionListeners();
+		
+		// You fill this in
+		
     }
    
   
@@ -114,6 +118,7 @@ public class FacePamphlet extends Program
     		}
     		
 		}else if ((cmd.equals("Add Friend"))||(e.getSource() == friendField)) {
+			println("Add friend depressed");
 			if (friendField.getText().equalsIgnoreCase(currentProfile.getName())){
 					messageString = "You can't add yourself as a friend!!";
 			}else if  (checkJTextField(friendField)) {
@@ -126,7 +131,13 @@ public class FacePamphlet extends Program
 				}
 				
 			}	
-		}profileCanvas.displayProfile(currentProfile);
+		}else if (cmd.equals("Display Everyone")) {
+			println("Display everyone button depressed");
+		}
+		
+		
+		
+		profileCanvas.displayProfile(currentProfile);
 		profileCanvas.showMessage(messageString);
 		displayAllPersons(profileDatabase.getProfileMap());
 		
