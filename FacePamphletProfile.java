@@ -89,6 +89,7 @@ public class FacePamphletProfile implements FacePamphletConstants {
 	 * the given friend name could not be removed.)
 	 */
 	public boolean removeFriend(String friend) {
+		System.out.println("removeFriend called");
 		if (profileFriends.contains(friend)) {
 			profileFriends.remove(friend);
 			return true;
@@ -109,6 +110,29 @@ public class FacePamphletProfile implements FacePamphletConstants {
 		return getFriendsIt;
 	}
 	
+	
+	/** 
+	 * This method returns the number of friends in a friends
+	 * profile.
+	 */ 
+	public int getNumFriends() {
+		// You fill this in.  Currently always returns null.
+		return profileFriends.size();
+	}
+	
+	
+	/** 
+	 * This method returns the number of friends in a friends
+	 * profile.
+	 */ 
+	public void addPopularity(String name, Integer numFriends) {
+		// You fill this in.  Currently always returns null.
+		popularityMap.put(name, numFriends);
+	}
+	
+	
+	
+	
 	/** 
 	 * This method returns a string representation of the profile.  
 	 * This string is of the form: "name (status): list of friends", 
@@ -119,7 +143,7 @@ public class FacePamphletProfile implements FacePamphletConstants {
 	 * For example, in a profile with name "Alice" whose status is 
 	 * "coding" and who has friends Don, Chelsea, and Bob, this method 
 	 * would return the string: "Alice (coding): Don, Chelsea, Bob"
-	 */ 
+	 */;
 	public String toString() {
 		String readout = profileName + " (" + profileStatus + ") : ";
 		Iterator<String> getFriendsIt = getFriends();
@@ -134,5 +158,6 @@ public class FacePamphletProfile implements FacePamphletConstants {
 	private GImage profileImage;
 	private String profileStatus = "";
 	private ArrayList <String> profileFriends;
+	private HashMap <String, Integer> popularityMap;
 	
 }

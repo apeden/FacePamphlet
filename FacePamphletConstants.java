@@ -49,6 +49,14 @@ public interface FacePamphletConstants {
 
 	/** The height (in pixels) that profile images should be displayed */
 	public static final double IMAGE_HEIGHT = 200;	
+	
+	/** The width (in pixels) that profile images should be displayed */
+	public static final double TENT_WIDTH = 120;
+
+	/** The height (in pixels) that profile images should be displayed */
+	public static final double TENT_HEIGHT = 120;	
+	
+	
 
 	/** The number of pixels in the vertical margin between the bottom 
 	 *  of the canvas display area and the baseline for the message 
