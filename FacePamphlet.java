@@ -33,6 +33,8 @@ public class FacePamphlet extends Program
 		pictureField.addActionListener(this);
 		friendField = new JTextField(TEXT_FIELD_SIZE);
 		friendField.addActionListener(this);
+		notFriendField = new JTextField(TEXT_FIELD_SIZE);
+		notFriendField.addActionListener(this);
 		add(new JButton("Display Everyone"), NORTH);
 		add(new JLabel("Name"), NORTH);
 		add(nameField, NORTH);
@@ -47,6 +49,9 @@ public class FacePamphlet extends Program
 		add(new JLabel(EMPTY_LABEL_TEXT), WEST);
 		add(friendField, WEST);
 		add(new JButton("Add Friend"), WEST);
+		add(new JLabel(EMPTY_LABEL_TEXT), WEST);
+		add(notFriendField, WEST);
+		add(new JButton("Delete Friend"), WEST);
 		
 		addActionListeners();
 		
@@ -143,6 +148,25 @@ public class FacePamphlet extends Program
 				
 			}	
 		}
+		
+		
+	    else if ((cmd.equals("Delete Friend"))||(e.getSource() == notFriendField)) {
+			println("Delete friend depressed");
+			if (notFriendField.getText().equalsIgnoreCase(currentProfile.getName())){
+					messageString = "You can't delete yourself as a friend!!";
+			}else if  (checkJTextField(notFriendField)) {
+				if (profileDatabase.containsProfile(notFriendField.getText())) {
+					currentProfile.removeFriend(notFriendField.getText());
+					messageString = notFriendField.getText()+ " and " + currentProfile.getName() + " are no longer friends.";
+					profileDatabase.getProfile(notFriendField.getText()).removeFriend(currentProfile.getName());
+				}else {
+					messageString = "A profile does not yet exist for " + notFriendField.getText();
+				}
+				
+			}	
+		}
+			
+		
 		println("Message displayed is " + messageString);
 		profileCanvas.showMessage(messageString);
 		if (!cmd.equals("Display Everyone")) {
@@ -167,6 +191,7 @@ public class FacePamphlet extends Program
     JTextField statusField;
     JTextField pictureField;
     JTextField friendField;
+    JTextField notFriendField;
     String messageString = "";
     FacePamphletProfile currentProfile;
     FacePamphletDatabase profileDatabase;
