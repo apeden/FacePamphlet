@@ -23,6 +23,7 @@ public class FacePamphlet extends Program
 	 * initialization that needs to be performed.
 	 */
 	public void init() {
+		
 		profileDatabase = new FacePamphletDatabase();
 		add(profileCanvas);
 		nameField = new JTextField(TEXT_FIELD_SIZE);
@@ -32,6 +33,9 @@ public class FacePamphlet extends Program
 		pictureField.addActionListener(this);
 		friendField = new JTextField(TEXT_FIELD_SIZE);
 		friendField.addActionListener(this);
+		notFriendField = new JTextField(TEXT_FIELD_SIZE);
+		notFriendField.addActionListener(this);
+		add(new JButton("Display Everyone"), NORTH);
 		add(new JLabel("Name"), NORTH);
 		add(nameField, NORTH);
 		add(new JButton("Add"), NORTH);
@@ -45,8 +49,14 @@ public class FacePamphlet extends Program
 		add(new JLabel(EMPTY_LABEL_TEXT), WEST);
 		add(friendField, WEST);
 		add(new JButton("Add Friend"), WEST);
-		// You fill this in
+		add(new JLabel(EMPTY_LABEL_TEXT), WEST);
+		add(notFriendField, WEST);
+		add(new JButton("Delete Friend"), WEST);
+		
 		addActionListeners();
+		
+		// You fill this in
+		
     }
    
   
@@ -83,13 +93,23 @@ public class FacePamphlet extends Program
 			if (profileDatabase.containsProfile(name)) {
 				FacePamphletProfile profile = profileDatabase.getProfile(name);
 				currentProfile = profile;
-				messageString = "";
+				messageString = name+" has "+ Integer.toString(profile.getNumFriends()) +" friends";
 				
 			} else {
 				currentProfile = null;
 				messageString = "The profile for " + name + " does not exist.";
 			}
-
+			
+		}else if (cmd.equals("Display Everyone")) {
+			if (profileDatabase.getProfileMap().size() > 24) {
+				messageString = "Too many people to assign to tents";
+			}
+			currentProfile = null;
+			messageString = "The most popular person is "+ profileDatabase.mostFriends();
+			println("Display everyone button depressed");
+			print(profileDatabase.getProfileMap().toString());
+			profileCanvas.displayAllPersons(profileDatabase.getProfileMap());//passed a hashmap
+		
 		}else if (currentProfile == null) {
 			messageString = "Please choose a profile in 'name' before adding a status, "
 					+ "picture or friend.";
@@ -97,7 +117,7 @@ public class FacePamphlet extends Program
     	}else if ((cmd.equals("Change Status"))||(e.getSource() == statusField)) {
     		if (checkJTextField(statusField)) { 			
     			currentProfile.setStatus(statusField.getText());
-    			messageString = "";
+    			messageString = currentProfile.getName() + " is" +statusField.getText();
     		}
     		
 		}else if ((cmd.equals("Change Picture"))||(e.getSource() == pictureField)) {
@@ -114,6 +134,7 @@ public class FacePamphlet extends Program
     		}
     		
 		}else if ((cmd.equals("Add Friend"))||(e.getSource() == friendField)) {
+			println("Add friend depressed");
 			if (friendField.getText().equalsIgnoreCase(currentProfile.getName())){
 					messageString = "You can't add yourself as a friend!!";
 			}else if  (checkJTextField(friendField)) {
@@ -126,10 +147,32 @@ public class FacePamphlet extends Program
 				}
 				
 			}	
-		}profileCanvas.displayProfile(currentProfile);
-		profileCanvas.showMessage(messageString);
-		displayAllPersons(profileDatabase.getProfileMap());
+		}
 		
+		
+	    else if ((cmd.equals("Delete Friend"))||(e.getSource() == notFriendField)) {
+			println("Delete friend depressed");
+			if (notFriendField.getText().equalsIgnoreCase(currentProfile.getName())){
+					messageString = "You can't delete yourself as a friend!!";
+			}else if  (checkJTextField(notFriendField)) {
+				if (profileDatabase.containsProfile(notFriendField.getText())) {
+					currentProfile.removeFriend(notFriendField.getText());
+					messageString = notFriendField.getText()+ " and " + currentProfile.getName() + " are no longer friends.";
+					profileDatabase.getProfile(notFriendField.getText()).removeFriend(currentProfile.getName());
+				}else {
+					messageString = "A profile does not yet exist for " + notFriendField.getText();
+				}
+				
+			}	
+		}
+			
+		
+		println("Message displayed is " + messageString);
+		profileCanvas.showMessage(messageString);
+		if (!cmd.equals("Display Everyone")) {
+			profileCanvas.displayProfile(currentProfile);
+			profileCanvas.showMessage(messageString);
+		}
 	}
 			
 	public boolean checkJTextField(JTextField field) {
@@ -141,14 +184,6 @@ public class FacePamphlet extends Program
 		}return false;
 	}
 	
-	public void displayAllPersons(HashMap <String, FacePamphletProfile> profileDatabaseMap) {
-		Iterator<String> profileDatabaseMapIt = profileDatabaseMap.keySet().iterator();
-		println("display all persons called");
-		print (profileDatabaseMapIt.hasNext());
-		while (profileDatabaseMapIt.hasNext()) {	
-			println(profileDatabaseMapIt.next().toString());
-		}
-	}
     	
     	// You fill this in as well as add any additional methods
     /*private instance variables*/
@@ -156,6 +191,7 @@ public class FacePamphlet extends Program
     JTextField statusField;
     JTextField pictureField;
     JTextField friendField;
+    JTextField notFriendField;
     String messageString = "";
     FacePamphletProfile currentProfile;
     FacePamphletDatabase profileDatabase;

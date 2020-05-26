@@ -57,12 +57,38 @@ public class FacePamphletDatabase implements FacePamphletConstants {
 	public void deleteProfile(String name) {
 		if (containsProfile(name)) {
 			profilesMap.remove(name);
+			profilesMapIt = profilesMap.keySet().iterator();
 			while (profilesMapIt.hasNext()) {
 				FacePamphletProfile nextProfile = profilesMap.get(profilesMapIt.next());
 				nextProfile.removeFriend(name);	
 			}
-			// You fill this in.  Currently always returns null.
-		}// You fill this in
+		}
+	}
+	
+	
+	/** 
+	 * This method returns the name of the person with the most 
+	 * friends or the joint person with the most friends
+	 * 
+	 * If there is no profile in the database and empty string is returned.
+	 */
+	public String mostFriends() {
+		String mostPopular = "Nothing yet";
+		profilesMapIt = profilesMap.keySet().iterator();
+		System.out.println (profilesMapIt.hasNext());
+		if (profilesMapIt.hasNext()) {
+			FacePamphletProfile nextProfile = profilesMap.get(profilesMapIt.next());
+			mostPopular = nextProfile.getName();
+			System.out.println("mostFriends redefined as " + mostPopular);
+			int mostFriends = nextProfile.getNumFriends();
+			while (profilesMapIt.hasNext()) {
+				nextProfile = profilesMap.get(profilesMapIt.next());
+				if (nextProfile.getNumFriends() > mostFriends) {
+					mostFriends = nextProfile.getNumFriends();
+					mostPopular = nextProfile.getName();
+				}
+			}
+		}return mostPopular;
 	}
 	
 	
